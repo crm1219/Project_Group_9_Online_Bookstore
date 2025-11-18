@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/crm1219/Project_Group_9_Online_Bookstore#readme",
   "dependencies": {
+    "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
