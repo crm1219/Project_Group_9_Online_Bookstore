@@ -1,16 +1,19 @@
+// Loads .env variables when needed
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
+
 const app = express();
 
 // Set EJS as template engine
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "ejsTemplate", "views"));
 
-// Serve static files (CSS, images, JS)
-app.use(express.static(path.join(__dirname, "public")));
+// Serve static files (CSS, images, JS) from 'ejsTemplate/public'
+app.use(express.static(path.join(__dirname, "ejsTemplate", "public")));
 
-// Bring in the home route
-const homeRoute = require("./routes/home");
+// Require home route 
+const homeRoute = require("./ejsTemplate/routes/home");
 app.use("/", homeRoute);
 
 // Start server
