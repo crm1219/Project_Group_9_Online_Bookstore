@@ -73,6 +73,17 @@ router.post("/book/:id/review", async (req, res) => {
             [reviewer, review, rating, currentDate, id]
         );
 
+        const numRatingsResult = await database.query("SELECT numRatings FROM books WHERE id = $1", [id]);
+
+        const ratingSumResult = await database.query("SELECT ratingSum FROM books WHERE id = $1", [id])
+
+        const newnumRatings = numRatingsResult.rows[0].numRatings + 1;
+        const newratingSum = ratingSumResult.rows[0].ratingSum + rating;
+        const newavgRating = newratingSum / newnumRatings;
+
+        await db.query("UPDATE books SET numRatings = $1, ratingSum = $2, avgRating = $3 WHERE id = $4", [newnumRatings, newratingSum, newavgRating, id]
+        );
+
         res.redirect(`/book/${id}`);
 
     } catch (err) {

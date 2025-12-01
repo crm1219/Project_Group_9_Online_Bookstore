@@ -24,7 +24,7 @@ catch (error) {
 
 async function addBook(book) {
   const id = (book.key).substring(6);
-  await pool.query("INSERT INTO books (title, author, date, coverSmall, coverLarge) VALUES ($1, $2, $3, $4, $5)", [book.title, book.authors[0].name, book.first_publish_year, "https://covers.openlibrary.org/w/olid" + id + "-M.jpg", "https://covers.openlibrary.org/w/olid" + id + "-L.jpg"]);
+  await pool.query("INSERT INTO books (title, author, date, coverSmall, coverLarge, numRatings, ratingSum) VALUES ($1, $2, $3, $4, $5, $6, $7)", [book.title, book.authors[0].name, book.first_publish_year, "https://covers.openlibrary.org/w/olid" + id + "-M.jpg", "https://covers.openlibrary.org/w/olid" + id + "-L.jpg", 0, 0]);
 };
 
 createDB();
