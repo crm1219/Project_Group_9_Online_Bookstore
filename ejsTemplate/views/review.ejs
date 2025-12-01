@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+          <title>Book Review</title>
+  <link rel="stylesheet" href="/review_style.css">
+    </head>
+    <body>
+        <main class="container">
+            <div class="review-box">
+
+                <h2>Leave a Review</h2>
+
+                <form action="/books/<%= book.id %>/reviews" method="POST">
+
+                    <label>Title:</label>
+                    <p>Book Title</p>
+                    <label>Author:</label>
+                    <p>Author name</p>
+                    <label>Rating:</label>
+                    <div class="rating-line">
+                    <select name="rating" class="rating-select" required>
+                        <option value="">–</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <span>out of 5 stars</span>
+                    </div>
+                    <br>
+                    <label>Review / thoughts:</label>
+                    <br>
+                    <textarea name="body" class="textarea" rows="7" required></textarea>
+                    <br>
+                    <button type="submit" class="post-btn">POST</button>
+
+                </form>
+            </div>
+        </main>
+
+    </body>
+
+</html>
