@@ -11,6 +11,8 @@ app.set("views", path.join(__dirname, "ejsTemplate", "views"));
 
 // Serve static files (CSS, images, JS) from 'ejsTemplate/public'
 app.use(express.static(path.join(__dirname, "ejsTemplate", "public")));
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json());
 
 // Require home route 
 const homeRoute = require("./ejsTemplate/routes/home");
