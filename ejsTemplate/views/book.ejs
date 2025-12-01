@@ -31,7 +31,7 @@
         <%= book.date %>
       </p>
       <p><strong>Avg Rating:</strong>
-        <%= book.avgRating ? book.avgRating : 'No ratings yet' %> / 5 ⭐
+        <%= book.avgrating ? book.avgrating : 'No ratings yet' %> / 5 ⭐
       </p>
 
     </div>
@@ -63,7 +63,7 @@
       </div>
 
       <h3>Reviews:</h3>
-      <% if (reviews &&XD reviews.length> 0) { %>
+      <% if (reviews.length> 0) { %>
         <% reviews.forEach(review=> { %>
           <div class="review-card">
             <p>
