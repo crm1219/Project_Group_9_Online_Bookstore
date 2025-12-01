@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= book.title %> - Book Details
+  </title>
+  <link rel="stylesheet" href="/book_style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/" class="nav-left" style="text-decoration: none; color: black; font-weight: bold;">← Back to Home</a>
+    <div class="search-bar">
+    </div>
+  </nav>
+
+  <div class="book-container">
+    <div class="book-image-large">
+      <img src="<%= book.coverlarge %>" alt="<%= book.title %>">
+    </div>
+
+    <div class="book-info">
+      <h2>
+        <%= book.title %>
+      </h2>
+      <p><strong>Author:</strong>
+        <%= book.author %>
+      </p>
+      <p><strong>Published:</strong>
+        <%= book.date %>
+      </p>
+      <p><strong>Avg Rating:</strong>
+        <%= book.avgrating ? book.avgrating : 'No ratings yet' %> / 5 ⭐
+      </p>
+
+    </div>
+
+    <div class="reviews-section">
+
+      <div class="add-review-form" style="background: #f1f1f1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3>Add a Review</h3>
+        <form action="/book/<%= book.id %>/review" method="POST">
+          <div style="margin-bottom: 10px;">
+            <input type="text" name="reviewer" placeholder="Your Name" required style="width: 100%; padding: 8px;">
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label>Rating:</label>
+            <select name="rating">
+              <option value="5">5 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="2">2 Stars</option>
+              <option value="1">1 Star</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <textarea name="review" placeholder="Write your review here..." required
+              style="width: 100%; height: 80px; padding: 8px;"></textarea>
+          </div>
+          <button type="submit" class="review-btn" style="border: none; cursor: pointer;">Submit Review</button>
+        </form>
+      </div>
+
+      <h3>Reviews:</h3>
+      <% if (reviews &&XD reviews.length> 0) { %>
+        <% reviews.forEach(review=> { %>
+          <div class="review-card">
+            <p>
+              <strong>
+                <%= review.reviewer %>
+              </strong>
+              <span>(<%= review.rating %>/5)</span>
+              · <%= new Date(review.date).toLocaleDateString() %>
+            </p>
+            <p>
+              <%= review.review %>
+            </p>
+          </div>
+          <% }) %>
+            <% } else { %>
+              <p>No reviews yet. Be the first!</p>
+              <% } %>
+    </div>
+  </div>
+</body>
+
+</html>

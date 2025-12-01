@@ -7,11 +7,30 @@ const db = require("../../db/db");
 // Home page route
 router.get("/", async (req, res) => {
     try {
-        // Query the database to get all books
-        const result = await db.query('SELECT * FROM books');
+        const { search, sort } = req.query;
         
-        // Pass the 'books' array to your 'home.ejs' template
-        res.render("home", { books: result.rows });
+        let queryText = 'SELECT * FROM books';
+        let params = [];
+
+        if (search) {
+            queryText += ' WHERE title ILIKE $1 OR author ILIKE $1';
+            params.push(`%${search}%`);
+        }
+
+        if (sort === 'rating') {
+            queryText += ' ORDER BY avgRating DESC NULLS LAST';
+        } else if (sort === 'date') {
+            queryText += ' ORDER BY date DESC';
+        } else {
+            queryText += ' ORDER BY id ASC';
+        }
+
+        const result = await db.query(queryText, params);
+        
+        res.render("home", { 
+            books: result.rows,
+            searchQuery: search || ''
+        });
 
     } catch (err) {
         console.error(err);
@@ -23,18 +42,42 @@ router.get("/", async (req, res) => {
 router.get("/book/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        // Query for a single book by its ID
-        const result = await db.query('SELECT * FROM books WHERE id = $1', [id]);
         
-        if (result.rows.length > 0) {
-            // Render a new 'book.ejs' page
-            res.render("book", { book: result.rows[0] });
+        const bookResult = await db.query('SELECT * FROM books WHERE id = $1', [id]);
+        
+        const reviewResult = await db.query('SELECT * FROM reviews WHERE bookId = $1 ORDER BY date DESC', [id]);
+
+        if (bookResult.rows.length > 0) {
+            res.render("book", { 
+                book: bookResult.rows[0],
+                reviews: reviewResult.rows
+            });
         } else {
             res.status(404).send('Book not found');
         }
     } catch (err) {
         console.error(err);
         res.send("Error fetching book details.");
+    }
+});
+
+// Post Route for reviews
+router.post("/book/:id/review", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { reviewer, review, rating } = req.body;
+        const currentDate = new Date();
+
+        await db.query(
+            'INSERT INTO reviews (reviewer, review, rating, date, bookId) VALUES ($1, $2, $3, $4, $5)',
+            [reviewer, review, rating, currentDate, id]
+        );
+
+        res.redirect(`/book/${id}`);
+
+    } catch (err) {
+        console.error("Error submitting review:", err);
+        res.send("Error submitting review.");
     }
 });
 
