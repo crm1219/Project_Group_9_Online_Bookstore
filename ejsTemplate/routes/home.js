@@ -91,16 +91,16 @@ router.post("/book/:id/review", async (req, res) => {
         res.send("Error submitting review.");
     }
 });
-app.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
     const searchQuery = req.query.search || "";
 
     let books;
 
     if (searchQuery.trim() === "") {
         
-        books = await pool.query("SELECT * FROM books");
+        books = await db.query("SELECT * FROM books");
     } else {
-        books = await pool.query(
+        books = await db.query(
             "SELECT * FROM books WHERE title ILIKE $1 OR author ILIKE $1",
             [`%${searchQuery}%`]
         );
